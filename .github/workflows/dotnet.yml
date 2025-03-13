@@ -1,0 +1,43 @@
+# This workflow will build a .NET project
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
+
+name: .NET
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 9.0.x
+    - name: Clean API Solution
+      working-directory: API
+      run: dotnet clean
+    - name: Restore API dependencies
+      working-directory: API
+      run: dotnet restore
+    - name: Build API Solution
+      working-directory: API
+      run: dotnet build --no-restore
+    - name: Clean Test Solution
+      working-directory: Tests
+      run: dotnet clean
+    - name: Restore Tests dependencies
+      working-directory: Tests
+      run: dotnet restore
+    - name: Build Tests Solution
+      working-directory: Tests
+      run: dotnet build --no-restore
+    - name: Run Test Solution
+      working-directory: Tests
+      run: dotnet test --no-build --verbosity normal
