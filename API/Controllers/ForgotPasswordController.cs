@@ -35,9 +35,9 @@ public class ForgotPasswordController(IForgotPasswordService service) : Controll
             bool emailExist = _service.CheckIfEmailExists(email);
             return emailExist ? Ok(emailExist) : NotFound(emailExist);
         }
-        catch
+        catch(Exception e)
         {
-            return StatusCode(StatusCodes.Status500InternalServerError);
+            return StatusCode(StatusCodes.Status500InternalServerError, e);
         }
     }
 }
